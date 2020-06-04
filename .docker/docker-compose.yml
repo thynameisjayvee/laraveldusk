@@ -12,6 +12,7 @@ services:
       context: ./php
     ports:
       - ${PHP_PORT}:8000
+      - 9515:9515
     working_dir: ${WORKING_DIR}
     volumes:
       - ${PROJECT_PATH}:${WORKING_DIR}
@@ -36,6 +37,19 @@ services:
     restart: always
     links:
       - php
+
+  selenium:
+    container_name: ${PROJECT_NAME}-selenium
+    image: selenium/standalone-chrome
+    volumes:
+      - ${PROJECT_PATH}:${WORKING_DIR}
+    ports:
+      - 4444:4444
+    depends_on:
+      - php
+      - nginx
+    links:
+      - nginx:selenium.test
 
   mysql:
     depends_on:
